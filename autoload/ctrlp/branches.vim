@@ -25,7 +25,6 @@ call add(g:ctrlp_ext_vars, {
 
 function! ctrlp#branches#init()
   if !ctrlp#branches#is_git_repository()
-    let s:errmsg = 'Not a git repository (or any of the parent directories)'
     return []
   endif
 
@@ -41,14 +40,11 @@ function! ctrlp#branches#accept(mode, str)
 endfunction
 
 function! ctrlp#branches#exit()
-  if !empty(s:errmsg) | call s:error(s:errmsg) | endif
+  " noop
 endfunction
 
 " Give the extension an ID
 let s:id = g:ctrlp_builtins + len(g:ctrlp_ext_vars)
-
-" Error message to show on exit if any
-let s:errmsg = ''
 
 " Allow it to be called later
 function! ctrlp#branches#id()
@@ -57,14 +53,7 @@ endfunction
 
 function! ctrlp#branches#is_git_repository(...)
   let path = a:0 > 0 ? a:1 : getcwd()
-  return finddir('.git', fnameescape(path)) != '' ? 1 : 0
+  return finddir('.git', fnameescape(path)) != ''
 endfunction
-
-
-function! s:error(message)
-  echohl ErrorMsg | echomsg a:message | echohl NONE
-  let v:errmsg = a:message
-endfunction
-
 
 " vim:nofen:fdl=0:ts=2:sw=2:sts=2
